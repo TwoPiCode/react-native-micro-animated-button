@@ -35,6 +35,7 @@ const colors =
 export default class MicroAnimatedButton extends Component {
   static propTypes = {
     activeOpacity: PropTypes.number,
+    animateStepDuration: PropTypes.number,
     backgroundColor: PropTypes.string,
     bounce: PropTypes.bool,
     disabled: PropTypes.bool,
@@ -92,6 +93,7 @@ export default class MicroAnimatedButton extends Component {
 
   static defaultProps = {
     activeOpacity: undefined,
+    animateStepDuration: 250,
     backgroundColor: undefined,
     bounce: false,
     disabled: false,
@@ -289,12 +291,13 @@ export default class MicroAnimatedButton extends Component {
   // private methods
 
   animate = (step, { cb, error = false, timing = false, micro } = {}) => {
+    const { animateStepDuration } = this.props
     this.setState({ step, error }, () => {
       const type = timing ? Animated.timing : Animated.spring;
 
       type(this.animated, {
         toValue: step,
-        ...(timing ? { duration: 250 } : {})
+        ...(timing ? { duration: animateStepDuration } : {})
       }).start(({ finished }) => finished && cb && cb());
     });
 
